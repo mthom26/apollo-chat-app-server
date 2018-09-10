@@ -1,28 +1,13 @@
 import 'dotenv/config';
+import cors from 'cors';
 import express from 'express';
 import { ApolloServer, gql } from 'apollo-server-express';
 
+import schema from './schema';
+import resolvers from './resolvers';
+
 const app = express();
-
-const schema = gql`
-  type Query {
-    test: User
-  }
-
-  type User {
-    username: String!
-  }
-`;
-
-const resolvers = {
-  Query: {
-    test: () => {
-      return {
-        username: 'Testing'
-      };
-    }
-  }
-};
+app.use(cors());
 
 const server = new ApolloServer({
   typeDefs: schema,
