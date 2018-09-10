@@ -5,7 +5,7 @@ import { ApolloServer, gql } from 'apollo-server-express';
 
 import schema from './schema';
 import resolvers from './resolvers';
-import db from './models';
+import * as db from './models';
 
 const app = express();
 app.use(cors());

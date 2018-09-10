@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import user from './user';
+import User from './user';
 
 mongoose.set('debug', true);
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 
-export { user };
+export { User };
