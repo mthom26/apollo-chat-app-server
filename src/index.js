@@ -10,6 +10,11 @@ import * as db from './models';
 const app = express();
 app.use(cors());
 
+const getAuthUser = async (req) => {
+  // Get token
+  return null;
+};
+
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
@@ -18,7 +23,14 @@ const server = new ApolloServer({
       'editor.cursorShape': 'line'
     }
   },
-  context: { db }
+  context: async ({ req }) => {
+    const authUser = await getAuthUser(req);
+
+    return {
+      db,
+      authUser
+    }
+  }
 });
 
 server.applyMiddleware({ app, path: '/graphql' });

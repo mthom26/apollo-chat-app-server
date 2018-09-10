@@ -22,7 +22,11 @@ const userSchema = new mongoose.Schema({
   dateLastLogin: {
     type: Date,
     default: Date.now()
-  }
+  },
+  messages: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Message'
+  }]
 });
 
 const User = mongoose.model('User', userSchema);
