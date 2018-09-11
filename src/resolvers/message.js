@@ -1,6 +1,6 @@
 import { combineResolvers } from 'graphql-resolvers';
 
-import { isAuthenticated } from './authorization';
+import { isAuthenticated, isMessageOwner } from './authorization';
 
 export default {
   Query: {
@@ -28,9 +28,14 @@ export default {
         return newMessage;
       }
     ),
-    deleteMessage: async (parent, { id }, { db }) => {
-
-    }
+    deleteMessage: combineResolvers(
+      isMessageOwner,
+      async (parent, { id }, { db }) => {
+        console.log(id);
+        await db.Message.findByIdAndDelete(id); 
+        return true;    
+      }
+    )
   },
 
   Message: {
