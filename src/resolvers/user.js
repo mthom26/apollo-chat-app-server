@@ -8,12 +8,12 @@ export default {
     },
     user: async (parent, { id }, { db }) => {
       const user = await db.User.findById(id);
-      console.log(user);
+      //console.log(user);
       return user;
     },
     users: async (parent, args, { db }) => {
       const users = await db.User.find();
-      console.log(users);
+      //console.log(users);
       return users;
     }
   },

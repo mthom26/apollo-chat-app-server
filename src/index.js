@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
-import { ApolloServer, gql } from 'apollo-server-express';
+import { ApolloServer, AuthenticationError } from 'apollo-server-express';
+import jwt from 'jsonwebtoken';
 
 import schema from './schema';
 import resolvers from './resolvers';
@@ -11,8 +12,15 @@ const app = express();
 app.use(cors());
 
 const getAuthUser = async (req) => {
-  // Get token
-  return null;
+  const token = req.headers.authorization;
+  // Token is assumed to be of the form "Bearer tokenStringHere"
+  if(token) {
+    try {
+      return await jwt.verify(token.split(' ')[1], process.env.SECRET);
+    } catch(err) {
+      throw new AuthenticationError('Your session has expired. Please Sign In.');
+    }
+  }
 };
 
 const server = new ApolloServer({
@@ -25,7 +33,7 @@ const server = new ApolloServer({
   },
   context: async ({ req }) => {
     const authUser = await getAuthUser(req);
-
+    
     return {
       db,
       authUser
