@@ -6,12 +6,12 @@ export default {
   Query: {
     message: async (parent, args, { db }) => {
       const message = await db.Message.findById(id);
-      console.log(message);
+      //console.log(message);
       return message;
     },
     messages: async (parent, args, { db }) => {
       const messages = await db.Message.find();
-      console.log(messages);
+      //console.log(messages);
       return messages;
     }
   },
@@ -24,14 +24,18 @@ export default {
           content,
           user: authUser.id
         });
-        console.log(newMessage);
+        
+        let user = await db.User.findById(authUser.id);
+        user.messages.push(newMessage.id);
+        await user.save();
+        
         return newMessage;
       }
     ),
     deleteMessage: combineResolvers(
       isMessageOwner,
       async (parent, { id }, { db }) => {
-        console.log(id);
+        //console.log(id);
         await db.Message.findByIdAndDelete(id); 
         return true;    
       }
