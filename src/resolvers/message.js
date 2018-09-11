@@ -28,15 +28,17 @@ export default {
         let user = await db.User.findById(authUser.id);
         user.messages.push(newMessage.id);
         await user.save();
-        
+
         return newMessage;
       }
     ),
     deleteMessage: combineResolvers(
       isMessageOwner,
       async (parent, { id }, { db }) => {
-        //console.log(id);
-        await db.Message.findByIdAndDelete(id); 
+        const message = await db.Message.findById(id); 
+        // Must call .remove here instead of findByIdAndDelete() to trigger 
+        // pre('remove') function in messageSchema
+        await message.remove();
         return true;    
       }
     )
