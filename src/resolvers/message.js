@@ -46,7 +46,7 @@ export default {
 
   Message: {
     user: async (parent, args, { db }) => {
-      
+      return await db.User.findById(parent.user);
     }
   }
 }

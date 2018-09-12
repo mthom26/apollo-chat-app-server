@@ -56,5 +56,13 @@ export default {
 
       return { token: 'Nope!' };
     }
+  },
+
+  User: {
+    messages: async (parent, args, { db }) => {
+      const messages = await db.Message.find({ user: parent.id });
+      console.log(messages);
+      return messages;
+    }
   }
 }
