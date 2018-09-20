@@ -3,8 +3,10 @@ import jwt from 'jsonwebtoken';
 
 export default {
   Query: {
-    test: async (parent, args, { db }) => {
-      return { username: 'Testing' };
+    authUser: async (parent, args, { db, authUser }) => {
+      const user = await db.User.find({ username: authUser.username });
+      //console.log(`Getting authUser from DB: ${user}`);
+      return user[0];
     },
     user: async (parent, { id }, { db }) => {
       const user = await db.User.findById(id);
