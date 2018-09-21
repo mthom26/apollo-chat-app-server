@@ -9,8 +9,14 @@ export default {
       //console.log(message);
       return message;
     },
-    messages: async (parent, args, { db }) => {
-      const messages = await db.Message.find();
+    messages: async (parent, { limit, cursor }, { db }) => {
+      const pointer = cursor
+        ? { createdAt: { $lte: cursor } }
+        : null;
+
+      const messages = await db.Message.find(pointer)
+        .sort({ createdAt: 'desc' })
+        .limit(limit);
       //console.log(messages);
       return messages;
     }
