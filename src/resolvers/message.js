@@ -16,9 +16,19 @@ export default {
 
       const messages = await db.Message.find(pointer)
         .sort({ createdAt: 'desc' })
-        .limit(limit);
+        .limit(limit + 1);
+
+      const hasNextPage = messages.length > limit;
+      const edges = hasNextPage ? messages.slice(0, -1) : messages;
+
       //console.log(messages);
-      return messages;
+      return {
+          edges,
+          pageInfo: {
+            endCursor: messages[messages.length - 1].createdAt,
+            hasNextPage
+          }
+        };
     }
   },
 
