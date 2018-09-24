@@ -1,6 +1,7 @@
 import { combineResolvers } from 'graphql-resolvers';
 
 import { isAuthenticated, isMessageOwner } from './authorization';
+import pubsub, { EVENTS } from '../subscription';
 
 export default {
   Query: {
@@ -45,6 +46,13 @@ export default {
         user.messages.push(newMessage.id);
         await user.save();
 
+        // TODO - cannot query the user on subscription
+        pubsub.publish(EVENTS.MESSAGE.CREATED, {
+          messageCreated: {
+            message: newMessage
+          } 
+        });
+
         return newMessage;
       }
     ),
@@ -58,6 +66,14 @@ export default {
         return true;    
       }
     )
+  },
+
+  Subscription: {
+    messageCreated: {
+      subscribe: (parent, args, context) => {
+        return pubsub.asyncIterator(EVENTS.MESSAGE.CREATED);
+      }
+    }
   },
 
   Message: {

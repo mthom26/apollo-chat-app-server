@@ -11,6 +11,10 @@ export default gql `
     deleteMessage(id: String!): Boolean!
   }
 
+  extend type Subscription {
+    messageCreated: MessageCreated!
+  }
+
   type MessageBlock {
     edges: [Message!]!
     pageInfo: PageInfo!
@@ -26,6 +30,10 @@ export default gql `
     content: String!
     user: User!
     createdAt: String!
+  }
+
+  type MessageCreated {
+    message: Message!
   }
 `;
 
