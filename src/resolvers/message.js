@@ -46,7 +46,6 @@ export default {
         user.messages.push(newMessage.id);
         await user.save();
 
-        // TODO - cannot query the user on subscription
         pubsub.publish(EVENTS.MESSAGE.CREATED, {
           messageCreated: {
             message: newMessage

@@ -43,7 +43,9 @@ const server = new ApolloServer({
     }
 
     if(connection) {
-      return db
+      return {
+        db
+      }
     }
   }
 });
